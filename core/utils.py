@@ -27,6 +27,7 @@ def fetch_blood_groups():
     update_date = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0])
     dbgroups = []
     for group in groups:
-        dbgroup = BloodGroup.objects.create(groupid=group.name, status=group.value)
+        dbgroup, created = BloodGroup.objects.get_or_create(groupid=group.name)
+        dbgroup.status = group.value
         dbgroups.append(dbgroup)
     return dbgroups, update_date

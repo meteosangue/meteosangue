@@ -28,4 +28,5 @@ class UtilsTest(TestCase):
         self.assertEqual(len(BloodGroup.objects.all()), 0)
         fetch_blood_groups()
         self.assertEqual(len(BloodGroup.objects.all()), 8)
-
+        fetch_blood_groups()
+        self.assertEqual(len(BloodGroup.objects.all()), 8)
