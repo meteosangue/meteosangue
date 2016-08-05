@@ -10,6 +10,7 @@ BLOOD_GROUP_STATUSES = (
     ('E', 'Eccedenza'),
 )
 
+
 class BloodGroup(models.Model):
     groupid = models.CharField(max_length=3, unique=True) #AB+, B-, ...
     status = models.CharField(
@@ -17,3 +18,10 @@ class BloodGroup(models.Model):
         choices=BLOOD_GROUP_STATUSES,
         default='S',
     ) #choice between U, E ...
+
+
+class Log(models.Model):
+    datetime = models.DateTimeField(unique=True)
+    twitter_done = models.BooleanField(default=False)
+    facebook_done = models.BooleanField(default=False)
+    instagram_done = models.BooleanField(default=False)

@@ -1,0 +1,228 @@
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" href="../stile.css" type="text/css">
+    <link rel="shortcut icon" href="../IMG/logoCrsIcona.ico">
+    <script src="../lib/httpt.js"></script>
+    <script src="../date.js"></script>
+    <script src="../lib/tooltip.js"></script>
+    <script src="../lib/prototype.js"></script>
+    <script src="../meteo/meteo.js"></script>
+      <style>
+        div.meteo
+        {
+          background-color: #FFFFCC;
+          border: 1px solid #000000;
+          display: none;
+          margin: 2px;
+          padding: 2px;
+          position: absolute;
+          width: 380px;
+          z-index: 100;
+         }
+      </style>
+      <script>
+      </script>
+  </head>
+  <body bgcolor="#EDEDED" style="margin: 0 0 0 0; padding: 0 0 0 0;" marginwidth="0" marginheight="0">
+    <div id="help" class="meteo" style="display: none; position: absolute; z-index: 100; top: px; left: px; width:200px;">
+      <table align="center">
+      </table>
+    </div>
+    <div id="meteo">
+    <div align="center" style="overflow: auto;">
+    <div class="titolo">Regione Toscana<br>CRS - Centro Regionale Sangue</div>
+    <div class="titolo"><img border="0" src="../IMG/logoCrsLogin.gif" align="top"></div>
+    <div class="titolo">&nbsp;</div>
+    <div class="titolo">Meteo del sangue</div>
+    <div class="sottotitolo" id="aggiornamento">Aggiornato a&nbsp;giovedì 04 agosto 2016&nbsp;alle&nbsp;09:10</div>
+      <table class="filtro" border="1"  style="height: 50%; width: 80%">
+        <tr>
+          <td class="tabellaalter" align="center">
+            &nbsp;
+          </td>
+          <td class="tabellaalter" align="center">
+            <span class="messaggio" style="font-size: 24px;">+</span>
+          </td>
+          <td class="tabellaalter" align="center">
+            <span class="messaggio" style="font-size: 24px;">-</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="tabellaalter" align="center">
+            <span class="messaggio">A</span>
+          </td>
+          <td class="input" align="center">
+            <table>
+              <tr>
+                <td class="input" align="center">
+                  <input type="hidden" id="AP" name="AP" value="Z">
+                  <a id="img_AP" onmouseover="visualhelp('AP', 'Z');" onmouseout="hidehelp();">
+                    <img src="../IMG/Z.gif" style="border:0; ">
+                  </a>
+                </td>
+
+                <td>
+                  <a href="javascript:void(0);" onclick="visualhelp('AP', 'Z');"><img src="../IMG/info2.gif" border="0"></a>
+                </td>
+              </tr>
+              <tr>
+                <td class="input" align="center">
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td class="input" align="center">
+          <table>
+            <tr>
+              <td class="input" align="center">
+                <input type="hidden" id="AN" name="AN" value="Z">
+                  <a id="img_AM" onmouseover="visualhelp('AM', 'Z');" onmouseout="hidehelp();">
+                    <img src="../IMG/Z.gif" style="border:0;"/>
+                  </a>
+              </td>
+              <td>
+                <a href="javascript:void(0);" onclick="visualhelp('AM', 'Z')"><img src="../IMG/info2.gif" border="0"></a>
+              </td>
+            </tr>
+            <tr>
+              <td class="input" align="center">
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td class="tabellaalter" align="center">
+          <span class="messaggio">B</span>
+        </td>
+        <td class="input" align="center">
+          <table>
+            <tr>
+              <td class="input" align="center">
+                <input type="hidden" id="BP" name="BP" value="S">
+                  <a id="img_BP" onmouseover="visualhelp('BP', 'S');" onmouseout="hidehelp();">
+                    <img src="../IMG/S.gif" style="border:0;" />
+                  </a>
+              </td>
+              <td>
+                <a href="javascript:void(0);" onclick="visualhelp('BP', 'S')"><img src="../IMG/info2.gif" border="0"></a>
+              </td>
+            </tr>
+            <tr>
+              <td class="input" align="center"></td>
+            </tr>
+          </table>
+        </td>
+        <td class="input" align="center">
+          <table>
+            <tr>
+              <td class="input" align="center">
+                <input type="hidden" id="BN" name="BN" value="U">
+                  <a id="img_BM" onmouseover="visualhelp('BM', 'U');" onmouseout="hidehelp();">
+                    <img src="../IMG/U.gif" style="border:0;"/>
+                  </a>
+               </td>
+               <td>
+                 <a href="javascript:void(0);" onclick="visualhelp('BM', 'U')"><img src="../IMG/info2.gif" border="0"></a>
+               </td>
+            </tr>
+            <tr>
+              <td class="input" align="center">
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td class="tabellaalter" align="center">
+          <span class="messaggio">0</span>
+        </td>
+        <td class="input" align="center">
+          <table>
+            <tr>
+              <td class="input" align="center">
+                <input type="hidden" id="OP" name="OP" value="Z">
+                  <a id="img_OP" onmouseover="visualhelp('OP', 'Z');" onmouseout="hidehelp();">
+                    <img src="../IMG/Z.gif" style="border:0; "/>
+                  </a>
+              </td>
+              <td>
+                <a href="javascript:void(0);" onclick="visualhelp('OP', 'Z')"><img src="../IMG/info2.gif" border="0"></a>
+              </td>
+            </tr>
+            <tr>
+              <td class="input" align="center">
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td class="input" align="center">
+          <table>
+            <tr>
+              <td class="input" align="center">
+                <input type="hidden" id="ON" name="ON" value="Z">
+                <a id="img_OM" onmouseover="visualhelp('OM', 'Z');" onmouseout="hidehelp();">
+                  <img src="../IMG/Z.gif" style="border:0;"/>
+                </a>
+              </td>
+              <td>
+                <a href="javascript:void(0);" onclick="visualhelp('OM', 'Z')"><img src="../IMG/info2.gif" border="0"></a>
+              </td>
+            </tr>
+            <tr>
+              <td class="input" align="center">
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td class="tabellaalter" align="center">
+          <span class="messaggio">AB</span>
+        </td>
+        <td class="input" align="center">
+          <table>
+            <tr>
+              <td class="input" align="center">
+                <input type="hidden" id="ABP" name="ABP" value="E">
+                <a id="img_ABP" onmouseover="visualhelp('ABP', 'E');" onmouseout="hidehelp();">
+                  <img src="../IMG/E.gif" style="border:0;"/>
+                </a>
+              </td>
+              <td>
+                <a href="javascript:void(0);" onclick="visualhelp('ABP', 'E')"><img src="../IMG/info2.gif" border="0"></a>
+              </td>
+            </tr>
+            <tr>
+              <td class="input" align="center">
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td class="input" align="center">
+          <table>
+            <tr>
+              <td class="input" align="center">
+                <input type="hidden" id="ABN" name="ABN" value="E">
+                <a id="img_ABM" onmouseover="visualhelp('ABM', 'E');" onmouseout="hidehelp();">
+                  <img src="../IMG/E.gif" style="border:0;"/>
+                </a>
+              </td>
+              <td>
+                <a href="javascript:#" onclick="visualhelp('ABM', 'U')"><img src="../IMG/info2.gif" border="0"></a>
+              </td>
+            </tr>
+            <tr>
+              <td class="input" align="center">
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+  </div>
+  </body>
+</html>

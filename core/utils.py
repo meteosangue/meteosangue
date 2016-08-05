@@ -1,10 +1,11 @@
 import locale
 import requests
 
+from django.db.models import Q
 from datetime import datetime
 from lxml import html
 
-from .models import BloodGroup
+from .models import BloodGroup, Log
 
 
 """
@@ -20,14 +21,24 @@ def crs_to_date(date):
 """
 Method to fetch blood groups
 """
-def fetch_blood_groups():
+def update_blood_groups():
     page = requests.get('https://web2.e.toscana.it/crs/meteo/')
     tree = html.fromstring(page.content)
     groups = tree.xpath('//input[@type="hidden"]')
-    update_date = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0])
-    dbgroups = []
-    for group in groups:
-        dbgroup, created = BloodGroup.objects.get_or_create(groupid=group.name)
-        dbgroup.status = group.value
-        dbgroups.append(dbgroup)
-    return dbgroups, update_date
+    update_time = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0])
+    log, created = Log.objects.get_or_create(datetime=update_time)
+
+    if created:
+        Log.objects.filter(~Q(datetime=update_time)).delete()
+        for group in groups:
+            dbgroup, created = BloodGroup.objects.get_or_create(groupid=group.name)
+            dbgroup.status = group.value
+            dbgroup.save()
+    return BloodGroup.objects.all(), log
+
+
+"""
+Method to post blood weather on social
+"""
+def post_blood_weather(blood_groups, log):
+    pass

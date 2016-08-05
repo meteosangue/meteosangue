@@ -1,10 +1,10 @@
-from .utils import fetch_blood_groups
+from .models import Log
+from .utils import post_blood_weather, update_blood_groups
 
 
 """
 Celery tasks to update blood statuses
 """
-def fetch_blood_groups_task():
-    blood_groups = fetch_blood_groups()
-    print (blood_groups)
-    return blood_groups
+def main_blood_groups_task():
+    blood_groups, log = fetch_blood_groups()
+    post_blood_weather(blood_groups, log)

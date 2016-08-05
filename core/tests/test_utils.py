@@ -4,9 +4,9 @@ import responses
 
 from datetime import datetime
 from django.test import TestCase
-from core.utils import crs_to_date, fetch_blood_groups
+from core.utils import crs_to_date, update_blood_groups
 
-from core.models import BloodGroup
+from core.models import BloodGroup, Log
 
 
 class UtilsTest(TestCase):
@@ -26,7 +26,52 @@ class UtilsTest(TestCase):
                   body=mock_body, status=200,
                   content_type='text/html; charset=UTF-8')
         self.assertEqual(len(BloodGroup.objects.all()), 0)
-        fetch_blood_groups()
+        update_blood_groups()
         self.assertEqual(len(BloodGroup.objects.all()), 8)
-        fetch_blood_groups()
+        update_blood_groups()
         self.assertEqual(len(BloodGroup.objects.all()), 8)
+
+    @responses.activate
+    def test_do_not_duplicate_logs(self):
+        mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page.html')).read()
+        responses.add(responses.GET, 'https://web2.e.toscana.it/crs/meteo/',
+                  body=mock_body, status=200,
+                  content_type='text/html; charset=UTF-8')
+        self.assertEqual(len(Log.objects.all()), 0)
+        update_blood_groups()
+        self.assertEqual(len(Log.objects.all()), 1)
+        update_blood_groups()
+        self.assertEqual(len(Log.objects.all()), 1)
+
+
+    @responses.activate
+    def test_update_blood_status(self):
+        self.assertEqual(len(Log.objects.all()), 0)
+        self.assertEqual(len(BloodGroup.objects.all()), 0)
+
+        mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page.html')).read()
+        responses.add(responses.GET, 'https://web2.e.toscana.it/crs/meteo/',
+                  body=mock_body, status=200,
+                  content_type='text/html; charset=UTF-8')
+
+        update_blood_groups()
+        self.assertEqual(len(Log.objects.all()), 1)
+        first_time = Log.objects.all()[0].datetime
+        self.assertEqual(len(BloodGroup.objects.all()), 8)
+        self.assertEqual(BloodGroup.objects.get(groupid='ABN').status, 'U')
+
+        responses.reset()
+
+        mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page_update.html')).read()
+        responses.add(responses.GET, 'https://web2.e.toscana.it/crs/meteo/',
+                  body=mock_body, status=200,
+                  content_type='text/html; charset=UTF-8')
+
+
+        update_blood_groups()
+        self.assertEqual(len(Log.objects.all()), 1)
+        second_time = Log.objects.all()[0].datetime
+        self.assertEqual(len(BloodGroup.objects.all()), 8)
+        self.assertEqual(BloodGroup.objects.get(groupid='ABN').status, 'E')
+
+        self.assertNotEqual(first_time, second_time)
