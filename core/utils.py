@@ -1,9 +1,13 @@
 import locale
+import os
 import requests
 
+from django.core.files import File
 from django.db.models import Q
 from datetime import datetime
 from lxml import html
+from tempfile import NamedTemporaryFile
+from selenium import webdriver
 
 from .models import BloodGroup, Log
 
@@ -22,14 +26,27 @@ def crs_to_date(date):
 Method to fetch blood groups
 """
 def update_blood_groups():
-    page = requests.get('https://web2.e.toscana.it/crs/meteo/')
-    tree = html.fromstring(page.content)
+    driver = webdriver.PhantomJS()
+    driver.set_window_size(450, 650)
+    driver.get("https://web2.e.toscana.it/crs/meteo/")
+
+    f = NamedTemporaryFile(delete=False)
+    driver.save_screenshot(f.name)
+    tree = html.fromstring(driver.page_source)
+    driver.quit()
+
     groups = tree.xpath('//input[@type="hidden"]')
     update_time = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0])
     log, created = Log.objects.get_or_create(datetime=update_time)
 
     if created:
         Log.objects.filter(~Q(datetime=update_time)).delete()
+        log.image.save(
+            update_time.strftime("%Y-%m-%d_%H:%M:%S"),
+            File(f)
+        )
+        f.close()
+        os.unlink(f.name)
         for group in groups:
             dbgroup, created = BloodGroup.objects.get_or_create(groupid=group.name)
             dbgroup.status = group.value

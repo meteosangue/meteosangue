@@ -1,5 +1,8 @@
 from __future__ import unicode_literals
 
+import os
+
+from django.conf import settings
 from django.db import models
 
 
@@ -21,6 +24,10 @@ class BloodGroup(models.Model):
 
 
 class Log(models.Model):
+    image = models.ImageField(
+        upload_to=os.path.join(settings.UPLOAD_ROOT, 'meteo'),
+        blank=True
+    )
     datetime = models.DateTimeField(unique=True)
     twitter_done = models.BooleanField(default=False)
     facebook_done = models.BooleanField(default=False)

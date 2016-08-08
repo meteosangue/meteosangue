@@ -8,6 +8,9 @@ from core.utils import crs_to_date, update_blood_groups
 
 from core.models import BloodGroup, Log
 
+from mock import mock
+
+from .utils import MockPhantomJS
 
 class UtilsTest(TestCase):
 
@@ -19,40 +22,34 @@ class UtilsTest(TestCase):
     def test_date_formatter_failing(self):
         self.assertRaises(ValueError, crs_to_date, 'Wrong value')
 
-    @responses.activate
-    def test_blood_groups_fetcher(self):
+    @mock.patch('core.utils.webdriver.PhantomJS', autospec = True)
+    def test_blood_groups_fetcher(self, phantom_driver):
         mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page.html')).read()
-        responses.add(responses.GET, 'https://web2.e.toscana.it/crs/meteo/',
-                  body=mock_body, status=200,
-                  content_type='text/html; charset=UTF-8')
+        phantom_driver.return_value = MockPhantomJS(mock_body)
         self.assertEqual(len(BloodGroup.objects.all()), 0)
         update_blood_groups()
         self.assertEqual(len(BloodGroup.objects.all()), 8)
         update_blood_groups()
         self.assertEqual(len(BloodGroup.objects.all()), 8)
 
-    @responses.activate
-    def test_do_not_duplicate_logs(self):
+    @mock.patch('core.utils.webdriver.PhantomJS', autospec = True)
+    def test_do_not_duplicate_logs(self, phantom_driver):
         mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page.html')).read()
-        responses.add(responses.GET, 'https://web2.e.toscana.it/crs/meteo/',
-                  body=mock_body, status=200,
-                  content_type='text/html; charset=UTF-8')
+        phantom_driver.return_value = MockPhantomJS(mock_body)
         self.assertEqual(len(Log.objects.all()), 0)
         update_blood_groups()
         self.assertEqual(len(Log.objects.all()), 1)
         update_blood_groups()
         self.assertEqual(len(Log.objects.all()), 1)
 
+    @mock.patch('core.utils.webdriver.PhantomJS', autospec = True)
+    def test_update_blood_status(self, phantom_driver):
 
-    @responses.activate
-    def test_update_blood_status(self):
         self.assertEqual(len(Log.objects.all()), 0)
         self.assertEqual(len(BloodGroup.objects.all()), 0)
 
         mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page.html')).read()
-        responses.add(responses.GET, 'https://web2.e.toscana.it/crs/meteo/',
-                  body=mock_body, status=200,
-                  content_type='text/html; charset=UTF-8')
+        phantom_driver.return_value = MockPhantomJS(mock_body)
 
         update_blood_groups()
         self.assertEqual(len(Log.objects.all()), 1)
@@ -60,13 +57,8 @@ class UtilsTest(TestCase):
         self.assertEqual(len(BloodGroup.objects.all()), 8)
         self.assertEqual(BloodGroup.objects.get(groupid='ABN').status, 'U')
 
-        responses.reset()
-
         mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page_update.html')).read()
-        responses.add(responses.GET, 'https://web2.e.toscana.it/crs/meteo/',
-                  body=mock_body, status=200,
-                  content_type='text/html; charset=UTF-8')
-
+        phantom_driver.return_value = MockPhantomJS(mock_body)
 
         update_blood_groups()
         self.assertEqual(len(Log.objects.all()), 1)
