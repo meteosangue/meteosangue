@@ -1,6 +1,7 @@
 import facebook
 import locale
 import os
+import pytz
 import requests
 import tweepy
 
@@ -18,11 +19,12 @@ from .models import BloodGroup, Log
 """
 Method to get date from CRS output
 """
-def crs_to_date(date):
+def crs_to_date(date, tz='UTC'):
+    my_tz = pytz.timezone(tz)
     locale.setlocale(locale.LC_TIME, "it_IT")
     clean1 = date.replace('Aggiornato a\xa0', '').replace('\xa0alle\xa0', ' ').split(' ')
     clean2 = ' '.join(clean1[1:])
-    return datetime.strptime(clean2, "%d %B %Y %H:%M")
+    return my_tz.localize(datetime.strptime(clean2, "%d %B %Y %H:%M"))
 
 
 """
@@ -82,7 +84,7 @@ def update_blood_groups():
     driver.quit()
 
     groups = tree.xpath('//input[@type="hidden"]')
-    update_time = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0])
+    update_time = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0], 'Europe/Rome')
     log, created = Log.objects.get_or_create(datetime=update_time)
 
     if created:
