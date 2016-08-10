@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import os
 
 from django.conf import settings
@@ -11,6 +9,7 @@ BLOOD_GROUP_STATUSES = (
     ('S', 'Stabile'),
     ('Z', 'Emergenza'),
     ('E', 'Eccedenza'),
+    ('F', 'Fragile'),
 )
 
 
@@ -25,10 +24,8 @@ class BloodGroup(models.Model):
 
 class Log(models.Model):
     image = models.ImageField(
-        upload_to=os.path.join(settings.UPLOAD_ROOT, 'meteo'),
+        upload_to=settings.UPLOAD_METEO,
         blank=True
     )
     datetime = models.DateTimeField(unique=True)
     twitter_done = models.BooleanField(default=False)
-    facebook_done = models.BooleanField(default=False)
-    instagram_done = models.BooleanField(default=False)
