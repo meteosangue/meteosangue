@@ -4,7 +4,7 @@ import responses
 
 from datetime import datetime
 from django.test import TestCase
-from core.utils import crs_to_date, update_blood_groups
+from core.utils import crs_to_date, update_blood_groups, get_blood_group_list
 
 from core.models import BloodGroup, Log
 
@@ -55,7 +55,7 @@ class UtilsTest(TestCase):
         self.assertEqual(len(Log.objects.all()), 1)
         first_time = Log.objects.all()[0].datetime
         self.assertEqual(len(BloodGroup.objects.all()), 8)
-        self.assertEqual(BloodGroup.objects.get(groupid='ABN').status, 'U')
+        self.assertEqual(BloodGroup.objects.get(groupid='AB-').status, 'U')
 
         mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page_update.html')).read()
         phantom_driver.return_value = MockPhantomJS(mock_body)
@@ -64,6 +64,25 @@ class UtilsTest(TestCase):
         self.assertEqual(len(Log.objects.all()), 1)
         second_time = Log.objects.all()[0].datetime
         self.assertEqual(len(BloodGroup.objects.all()), 8)
-        self.assertEqual(BloodGroup.objects.get(groupid='ABN').status, 'E')
+        self.assertEqual(BloodGroup.objects.get(groupid='AB-').status, 'E')
 
         self.assertNotEqual(first_time, second_time)
+
+    def test_get_blood_group_list(self):
+        BloodGroup.objects.create(groupid='B+', status='Z')
+        BloodGroup.objects.create(groupid='B-', status='U')
+        BloodGroup.objects.create(groupid='0-', status='U')
+        blood_groups = BloodGroup.objects.all()
+        self.assertEqual(
+            get_blood_group_list(blood_groups, '⚫️', 'Z', 'Emergenza'),
+            '⚫️ Emergenza: B+\n'
+        )
+        self.assertEqual(
+            get_blood_group_list(blood_groups, '🔴', 'U', 'Urgenza'),
+            '🔴 Urgenza: B- | 0-\n'
+        )
+        self.assertEqual(
+            get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza'),
+            ''
+        )
+

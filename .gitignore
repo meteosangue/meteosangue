@@ -5,7 +5,7 @@ venv
 *.sqlite3
 *.rdb
 .coverage
-settings_local.py
+local_settings.py
 static/
 libs/
 node_modules

@@ -1,7 +1,10 @@
+import facebook
 import locale
 import os
 import requests
+import tweepy
 
+from django.conf import settings
 from django.core.files import File
 from django.db.models import Q
 from datetime import datetime
@@ -42,20 +45,48 @@ def update_blood_groups():
     if created:
         Log.objects.filter(~Q(datetime=update_time)).delete()
         log.image.save(
-            update_time.strftime("%Y-%m-%d_%H:%M:%S"),
+            update_time.strftime("%Y-%m-%d_%H:%M:%S") + '.png',
             File(f)
         )
         f.close()
         os.unlink(f.name)
         for group in groups:
-            dbgroup, created = BloodGroup.objects.get_or_create(groupid=group.name)
+            group_id = group.name.replace('N', '-').replace('P', '+')
+            dbgroup, created = BloodGroup.objects.get_or_create(groupid=group_id)
             dbgroup.status = group.value
             dbgroup.save()
     return BloodGroup.objects.all(), log
 
 
 """
+Method to post with image on Twitter
+"""
+def tweet_status(status, log):
+    auth = tweepy.OAuthHandler(settings.CONSUMER_KEY, settings.CONSUMER_SECRET)
+    auth.set_access_token(settings.ACCESS_TOKEN, settings.ACCESS_TOKEN_SECRET)
+    api = tweepy.API(auth)
+    api.update_with_media(os.path.join(settings.UPLOAD_METEO, log.image.name), status=status)
+
+
+"""
+Method to format blood groups status
+"""
+def get_blood_group_list(blood_groups, icon, group_status, group_desc):
+    blood_groups_for_status = blood_groups.values_list('groupid', flat=True).filter(status=group_status)
+    if len(blood_groups_for_status):
+        return '{0} {1}: {2}\n'.format(icon, group_desc, ' | '.join(blood_groups_for_status))
+    else:
+        return ''
+
+
+"""
 Method to post blood weather on social
 """
 def post_blood_weather(blood_groups, log):
-    pass
+    status = ''
+    status += get_blood_group_list(blood_groups, '⚫️', 'Z', 'Emergenza')
+    status += get_blood_group_list(blood_groups, '🔴', 'U', 'Urgente')
+    status += get_blood_group_list(blood_groups, '⚠️', 'F', 'Fragile')
+    status += get_blood_group_list(blood_groups, '💚', 'S', 'Stabile')
+    status += get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza')
+    tweet_status(status, log)

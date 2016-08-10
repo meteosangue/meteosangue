@@ -19,9 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*p+&v_539nwysxjor+ez(qq7ihc6c+b+9ix9%is9a^^#rvs#5-'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -123,3 +120,6 @@ STATIC_URL = '/static/'
 
 ENV_PATH = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_ROOT = os.path.join(ENV_PATH, 'uploads/')
+UPLOAD_METEO = os.path.join(UPLOAD_ROOT, 'meteo/')
+
+from .local_settings import *
