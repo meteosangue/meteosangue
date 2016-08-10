@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 import os
 import responses
+import tweepy
 
 from datetime import datetime
 from django.test import TestCase
 from core.utils import crs_to_date, update_blood_groups, get_blood_group_list
+from core.tasks import main_blood_groups_task
 
 from core.models import BloodGroup, Log
 
 from mock import mock
 
 from .utils import MockPhantomJS
+
 
 class UtilsTest(TestCase):
 
@@ -86,3 +89,32 @@ class UtilsTest(TestCase):
             ''
         )
 
+    @mock.patch('core.utils.webdriver.PhantomJS', autospec = True)
+    @mock.patch('core.utils.tweet_status', autospec = True)
+    def test_do_not_post_on_twitter_two_times(self, tweet_status, phantom_driver):
+        self.assertEqual(len(Log.objects.all()), 0)
+        mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page.html')).read()
+
+        phantom_driver.return_value = MockPhantomJS(mock_body)
+
+        main_blood_groups_task()
+        self.assertEqual(tweet_status.call_count, 1)
+
+        main_blood_groups_task()
+        self.assertEqual(tweet_status.call_count, 1)
+
+    @mock.patch('core.utils.webdriver.PhantomJS', autospec = True)
+    @mock.patch('core.utils.tweet_status', autospec = True)
+    def test_retry_on_twitter_exception(self, tweet_status, phantom_driver):
+        self.assertEqual(len(Log.objects.all()), 0)
+        mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page.html')).read()
+
+        phantom_driver.return_value = MockPhantomJS(mock_body)
+
+        tweet_status.side_effect = tweepy.TweepError('Error on Twitter')
+        main_blood_groups_task()
+        self.assertTrue(not Log.objects.all()[0].twitter_done)
+
+        tweet_status.side_effect = None
+        main_blood_groups_task()
+        self.assertTrue(Log.objects.all()[0].twitter_done)

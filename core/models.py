@@ -23,9 +23,9 @@ class BloodGroup(models.Model):
 
 
 class Log(models.Model):
+    datetime = models.DateTimeField(unique=True)
     image = models.ImageField(
         upload_to=settings.UPLOAD_METEO,
         blank=True
     )
-    datetime = models.DateTimeField(unique=True)
     twitter_done = models.BooleanField(default=False)
