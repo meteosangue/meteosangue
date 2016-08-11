@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
-import os
+import os, sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -73,12 +73,25 @@ WSGI_APPLICATION = 'meteosangue.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'meteosangue.sqlite3'),
+        },
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'USER': 'astagi',
+            'NAME': 'meteosangue',
+            'TEST': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': os.path.join(BASE_DIR, 'meteosangue.sqlite3'),
+            },
+        },
+    }
 
 
 # Password validation
@@ -123,6 +136,8 @@ ENV_PATH = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_ROOT = os.path.join(ENV_PATH, 'uploads/')
 UPLOAD_METEO = os.path.join(UPLOAD_ROOT, 'meteo/')
 
+BLOOD_FETCH_INTERVAL = 60 * 15
+
 RQ_QUEUES = {
     'default': {
         'HOST': 'localhost',
@@ -139,6 +154,5 @@ RQ_QUEUES = {
         'DB': 0,
     }
 }
-
 
 from .local_settings import *

@@ -1,4 +1,6 @@
 import time
+import redis
+from django.conf import settings
 from django_rq import job
 
 from .models import Log
@@ -20,7 +22,10 @@ RQ job to update blood statuses
 def main_blood_groups_task():
     while True:
         fetch_and_update()
-        time.sleep(60 * 15)
+        time.sleep(settings.BLOOD_FETCH_INTERVAL)
 
 
-main_blood_groups_task.delay()
+try:
+    main_blood_groups_task.delay()
+except redis.ConnectionError:
+    pass
