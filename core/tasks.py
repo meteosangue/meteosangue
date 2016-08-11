@@ -1,5 +1,5 @@
 from .models import Log
-from .utils import post_blood_weather, update_blood_groups
+from .main import post_blood_weather, update_blood_groups
 
 
 """
