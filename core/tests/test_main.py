@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import pytz
 import responses
@@ -7,7 +6,7 @@ import tweepy
 from datetime import datetime
 from django.test import TestCase
 from core.main import update_blood_groups, get_blood_group_list
-from core.tasks import main_blood_groups_task
+from core.tasks import fetch_and_update
 
 from core.models import BloodGroup, Log
 
@@ -90,10 +89,10 @@ class MainTest(TestCase):
 
         phantom_driver.return_value = MockPhantomJS(mock_body)
 
-        main_blood_groups_task()
+        fetch_and_update()
         self.assertEqual(tweet_status.call_count, 1)
 
-        main_blood_groups_task()
+        fetch_and_update()
         self.assertEqual(tweet_status.call_count, 1)
 
     @mock.patch('core.main.webdriver.PhantomJS', autospec = True)
@@ -105,9 +104,9 @@ class MainTest(TestCase):
         phantom_driver.return_value = MockPhantomJS(mock_body)
 
         tweet_status.side_effect = tweepy.TweepError('Error on Twitter')
-        main_blood_groups_task()
+        fetch_and_update()
         self.assertTrue(not Log.objects.all()[0].twitter_done)
 
         tweet_status.side_effect = None
-        main_blood_groups_task()
+        fetch_and_update()
         self.assertTrue(Log.objects.all()[0].twitter_done)
