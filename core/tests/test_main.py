@@ -74,7 +74,7 @@ class MainTest(TestCase):
         )
         self.assertEqual(
             get_blood_group_list(blood_groups, '🔴', 'U', 'Urgenza'),
-            '🔴 Urgenza: B- | 0-\n'
+            '🔴 Urgenza: B- , 0-\n'
         )
         self.assertEqual(
             get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza'),

@@ -18,7 +18,7 @@ Method to format blood groups status
 def get_blood_group_list(blood_groups, icon, group_status, group_desc):
     blood_groups_for_status = blood_groups.values_list('groupid', flat=True).filter(status=group_status)
     if len(blood_groups_for_status):
-        return '{0} {1}: {2}\n'.format(icon, group_desc, ' | '.join(blood_groups_for_status))
+        return '{0} {1}: {2}\n'.format(icon, group_desc, ' , '.join(blood_groups_for_status))
     else:
         return ''
 
