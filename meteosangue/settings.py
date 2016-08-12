@@ -142,18 +142,13 @@ BLOOD_FETCH_INTERVAL = 60 * 15
 
 RQ_QUEUES = {
     'default': {
-        'HOST': 'localhost',
-        'PORT': 6379,
-        'DB': 0,
-        'PASSWORD': '',
+        'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
     },
     'high': {
-        'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'),
+        'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
     },
     'low': {
-        'HOST': 'localhost',
-        'PORT': 6379,
-        'DB': 0,
+        'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
     }
 }
 
