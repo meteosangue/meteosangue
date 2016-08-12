@@ -27,5 +27,5 @@ def main_blood_groups_task():
 
 try:
     main_blood_groups_task.delay()
-except redis.ConnectionError:
-    pass
+except redis.ConnectionError as ex:
+    print (ex)

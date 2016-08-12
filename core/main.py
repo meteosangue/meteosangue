@@ -39,7 +39,7 @@ def post_blood_weather(blood_groups, log):
             log.twitter_done = True
             log.save()
         except tweepy.TweepError as ex:
-            pass
+            print (ex)
 
 
 """
