@@ -148,12 +148,15 @@ BLOOD_FETCH_INTERVAL = 60 * 15
 RQ_QUEUES = {
     'default': {
         'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
+        'DEFAULT_TIMEOUT': 60 * 20,
     },
     'high': {
         'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
+        'DEFAULT_TIMEOUT': 60 * 20,
     },
     'low': {
         'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
+        'DEFAULT_TIMEOUT': 60 * 20,
     }
 }
 
