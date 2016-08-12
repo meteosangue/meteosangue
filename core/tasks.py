@@ -20,6 +20,7 @@ RQ job to update blood statuses
 """
 @job
 def main_blood_groups_task():
+    print ('Fetching blood status...')
     fetch_and_update()
     time.sleep(settings.BLOOD_FETCH_INTERVAL)
     return True
