@@ -11,7 +11,7 @@ Method to get date from CRS output
 """
 def crs_to_date(date):
     my_tz = pytz.timezone('Europe/Rome')
-    locale.setlocale(locale.LC_TIME, "it_IT")
+    locale.setlocale(locale.LC_TIME, "it_IT.utf8")
     clean1 = date.replace('Aggiornato a\xa0', '').replace('\xa0alle\xa0', ' ').split(' ')
     clean2 = ' '.join(clean1[1:])
     return my_tz.localize(datetime.strptime(clean2, "%d %B %Y %H:%M"))
