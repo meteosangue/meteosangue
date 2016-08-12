@@ -28,9 +28,9 @@ Method to post blood weather on social
 """
 def post_blood_weather(blood_groups, log):
     status = ''
-    status += get_blood_group_list(blood_groups, '⚫️', 'Z', 'Emergenza')
-    status += get_blood_group_list(blood_groups, '🔴', 'U', 'Urgente')
-    status += get_blood_group_list(blood_groups, '⚠️', 'F', 'Fragile')
+    status += get_blood_group_list(blood_groups, '🚨', 'Z', 'Emergenza')
+    status += get_blood_group_list(blood_groups, '🆘', 'U', 'Urgente')
+    status += get_blood_group_list(blood_groups, '💜', 'F', 'Fragile')
     status += get_blood_group_list(blood_groups, '💚', 'S', 'Stabile')
     status += get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza')
     if not log.twitter_done:
