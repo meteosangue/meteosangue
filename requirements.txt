@@ -4,6 +4,7 @@ click==6.6
 cookies==2.2.1
 croniter==0.3.12
 decorator==4.0.10
+dj-database-url==0.4.1
 Django==1.10
 django-rq==0.9.2
 djangorestframework==3.4.1
@@ -36,7 +37,3 @@ traitlets==4.2.2
 tweepy==3.5.0
 wcwidth==0.1.7
 wheel==0.24.0
-
-dj-database-url==0.4.0
-gunicorn==19.4.5
-whitenoise==2.0.6

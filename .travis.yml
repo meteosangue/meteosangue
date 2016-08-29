@@ -1,14 +1,15 @@
 language: python
-
 python:
+  - "3.4"
   - "3.5"
-
 before_install:
   - sudo apt-get update
   - sudo apt-get install phantomjs
-
+  - sudo apt-get --reinstall install -qq language-pack-it
+  - sudo pip install --upgrade pip
 install:
-  - sudo pip install -r requirements-test.txt
-
+  - pip install -r requirements-test.txt
 script:
   - ./runtests.sh
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
