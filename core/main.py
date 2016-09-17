@@ -11,8 +11,19 @@ from lxml import html
 from tempfile import NamedTemporaryFile
 from selenium import webdriver
 
+from .exceptions import MeteoSangueException
 from .models import BloodGroup, Log
-from .utils import crs_to_date, tweet_status
+from .posters import tweet_status, telegram_status
+from .posters_register import posters_register
+from .utils import crs_to_date
+
+
+"""
+Register posters
+"""
+posters_register.register_poster(tweet_status, 'twitter_done')
+posters_register.register_poster(telegram_status, 'telegram_done')
+
 
 """
 Method to format blood groups status
@@ -35,13 +46,10 @@ def post_blood_weather(blood_groups, log):
     status += get_blood_group_list(blood_groups, '💜', 'F', 'Fragile')
     status += get_blood_group_list(blood_groups, '💚', 'S', 'Stabile')
     status += get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza')
-    if not log.twitter_done:
-        try:
-            tweet_status(status, os.path.join(settings.UPLOAD_METEO, log.image.name))
-            log.twitter_done = True
-            log.save()
-        except tweepy.TweepError as ex:
-            print (ex)
+
+    posters_register.run(status, log)
+
+    log.save()
 
 
 """

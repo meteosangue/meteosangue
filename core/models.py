@@ -29,3 +29,4 @@ class Log(models.Model):
         blank=True
     )
     twitter_done = models.BooleanField(default=False)
+    telegram_done = models.BooleanField(default=False)

@@ -1,0 +1,3 @@
+
+class MeteoSangueException(Exception):
+	pass

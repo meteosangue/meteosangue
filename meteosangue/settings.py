@@ -33,6 +33,8 @@ ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET', 'D3V')
 CONSUMER_KEY = os.getenv('CONSUMER_KEY', 'D3V')
 CONSUMER_SECRET = os.getenv('CONSUMER_SECRET', 'D3V')
 
+TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', 'D3V')
+TELEGRAM_CHANNEL = os.getenv('TELEGRAM_CHANNEL', 'D3V')
 
 # Application definition
 
@@ -167,7 +169,13 @@ db_from_env = dj_database_url.config()
 if db_from_env:
     DATABASES['default'].update(db_from_env)
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+if 'test' in sys.argv:
+    try:
+        from .test_settings import *
+    except ImportError:
+        pass    
+else:
+    try:
+        from .local_settings import *
+    except ImportError:
+        pass
