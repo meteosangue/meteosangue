@@ -36,6 +36,8 @@ CONSUMER_SECRET = os.getenv('CONSUMER_SECRET', 'D3V')
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', 'D3V')
 TELEGRAM_CHANNEL = os.getenv('TELEGRAM_CHANNEL', 'D3V')
 
+FACEBOOK_TOKEN = os.getenv('FACEBOOK_TOKEN', 'D3V')
+
 # Application definition
 
 INSTALLED_APPS = [
