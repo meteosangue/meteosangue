@@ -74,4 +74,4 @@ class PostersTest(TestCase):
 
         self.assertFalse(Log.objects.all()[0].telegram_done)
         self.assertEqual(m.sendMessage.call_count, 1)
-        self.assertEqual(m.sendPhoto.call_count, 0)
+        self.assertEqual(m.sendPhoto.call_count, 1)
