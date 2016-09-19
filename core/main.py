@@ -13,7 +13,7 @@ from selenium import webdriver
 
 from .exceptions import MeteoSangueException
 from .models import BloodGroup, Log
-from .posters import tweet_status, telegram_status
+from .posters import tweet_status, telegram_status, facebook_status
 from .posters_register import posters_register
 from .utils import crs_to_date
 
@@ -23,6 +23,7 @@ Register posters
 """
 posters_register.register_poster(tweet_status, 'twitter_done')
 posters_register.register_poster(telegram_status, 'telegram_done')
+posters_register.register_poster(facebook_status, 'facebook_done')
 
 
 """

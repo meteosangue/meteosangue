@@ -30,3 +30,4 @@ class Log(models.Model):
     )
     twitter_done = models.BooleanField(default=False)
     telegram_done = models.BooleanField(default=False)
+    facebook_done = models.BooleanField(default=False)
