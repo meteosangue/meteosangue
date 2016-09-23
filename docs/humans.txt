@@ -1,0 +1,11 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Andrea Stagi -- @4stagi
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    Python
