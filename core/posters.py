@@ -25,7 +25,7 @@ def tweet_status(status, image_path=None):
 
     try:
         mention = '{0} {1}'.format(
-            ' '.join([ass['twitter_id'] for ass in settings.BLOOD_ASSOCIATIONS]),
+            ' '.join([ass['twitter_id'] for ass in settings.BLOOD_ASSOCIATIONS if 'twitter_id' in ass]),
             '⬆ Nuovo bollettino meteo ⬆',
         )
         api.update_status(mention, in_reply_to_status_id=new_tweet.id)

@@ -22,6 +22,10 @@ BLOOD_ASSOCIATIONS = [
         'name': 'Patrick Arminio',
         'twitter_id': '@patrick91',
         'facebook_id': 'patrick.arminio'
+    },
+
+    {
+        'name': 'Selfie Control',
     }
 
 ]
