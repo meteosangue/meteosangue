@@ -139,6 +139,42 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Blood associations data
+
+BLOOD_ASSOCIATIONS = [
+
+    {
+        'name': 'Avis Nazionale',
+        'twitter_id': '@avisnazionale',
+        'facebook_id': ''
+    },
+
+    {
+        'name': 'Avis Giovani',
+        'twitter_id': '@giovaniavis',
+        'facebook_id': ''
+    },
+
+    {
+        'name': 'Fidas Nazionale',
+        'twitter_id': '@FIDASnazionale',
+        'facebook_id': ''
+    },
+
+    {
+        'name': 'Frates Nazionale',
+        'twitter_id': '@FratresNaz',
+        'facebook_id': ''
+    },
+
+    {
+        'name': 'Centro Naz. Sangue',
+        'twitter_id': '@CentroSangue',
+        'facebook_id': ''
+    }
+
+]
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
@@ -175,7 +211,7 @@ if 'test' in sys.argv:
     try:
         from .test_settings import *
     except ImportError:
-        pass    
+        pass
 else:
     try:
         from .local_settings import *

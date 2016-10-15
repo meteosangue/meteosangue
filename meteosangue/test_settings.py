@@ -9,3 +9,19 @@ TELEGRAM_TOKEN='d3v:d3v'
 TELEGRAM_CHANNEL='@d3vsangue'
 
 FACEBOOK_TOKEN='d3v:d3v'
+
+BLOOD_ASSOCIATIONS = [
+
+    {
+        'name': 'Andrea Stagi',
+        'twitter_id': '@4stagi',
+        'facebook_id': 'andrea.stagi'
+    },
+
+    {
+        'name': 'Patrick Arminio',
+        'twitter_id': '@patrick91',
+        'facebook_id': 'patrick.arminio'
+    }
+
+]

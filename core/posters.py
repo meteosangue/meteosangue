@@ -15,12 +15,20 @@ def tweet_status(status, image_path=None):
         auth.set_access_token(settings.ACCESS_TOKEN, settings.ACCESS_TOKEN_SECRET)
         api = tweepy.API(auth)
         if image_path:
-            api.update_with_media(image_path, status=status)
+            new_tweet = api.update_with_media(image_path, status=status)
         else:
-            api.update_status(status)
+            new_tweet = api.update_status(status)
     except tweepy.TweepError as ex:
         raise MeteoSangueException(ex)
 
+    try:
+        mention = '{0} {1}'.format(
+            ' '.join([ass['twitter_id'] for ass in settings.BLOOD_ASSOCIATIONS]),
+            '⬆ Nuovo bollettino meteo ⬆',
+        )
+        api.update_status(mention, in_reply_to_status_id=new_tweet.id)
+    except tweepy.TweepError as ex:
+        pass #Mention is allowed to fail silently
 
 """
 Method to post with image on Telegram
