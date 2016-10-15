@@ -1,4 +1,6 @@
 import facebook
+import json
+import random
 import telepot
 import tweepy
 
@@ -44,13 +46,24 @@ def telegram_status(status, image_path=None):
 
 
 """
+Method to generate mention tags in Facebook
+"""
+def _generate_tag(user_id):
+    return {
+        'tag_uid': user_id
+    }
+
+
+"""
 Method to post with image on Facebook
 """
 def facebook_status(status, image_path=None):
+
+    tags = [_generate_tag(ass['facebook_id']) for ass in settings.BLOOD_ASSOCIATIONS if 'facebook_id' in ass]
     try:
         graph = facebook.GraphAPI(settings.FACEBOOK_TOKEN)
         if image_path:
-            graph.put_photo(image=open(image_path, 'rb'), message=status)
+            graph.put_photo(image=open(image_path, 'rb'), message=status, tags=json.dumps(tags))
         else:
             graph.put_wall_post(status)
     except Exception as ex:
