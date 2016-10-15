@@ -42,7 +42,10 @@ class PostersTest(TestCase):
 
         self.assertEqual(m.update_status.call_count, 1)
         self.assertEqual(m.update_with_media.call_count, 1)
-        m.update_status.assert_called_with('@4stagi @patrick91', in_reply_to_status_id='1')
+        m.update_status.assert_called_with(
+            '@4stagi @patrick91 ⬆ Nuovo bollettino meteo ⬆',
+            in_reply_to_status_id='1'
+        )
 
 
     @mock.patch('core.main.webdriver.PhantomJS', autospec = True)
