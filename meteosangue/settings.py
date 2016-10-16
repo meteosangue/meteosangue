@@ -146,31 +146,29 @@ BLOOD_ASSOCIATIONS = [
     {
         'name': 'Avis Nazionale',
         'twitter_id': '@avisnazionale',
-        'facebook_id': ''
+        'facebook_id': '154932917976132'
     },
 
     {
         'name': 'Avis Giovani',
         'twitter_id': '@giovaniavis',
-        'facebook_id': ''
     },
 
     {
         'name': 'Fidas Nazionale',
         'twitter_id': '@FIDASnazionale',
-        'facebook_id': ''
+        'facebook_id': '49816054736'
     },
 
     {
         'name': 'Frates Nazionale',
         'twitter_id': '@FratresNaz',
-        'facebook_id': ''
     },
 
     {
         'name': 'Centro Naz. Sangue',
         'twitter_id': '@CentroSangue',
-        'facebook_id': ''
+        'facebook_id': '477808612320970'
     }
 
 ]
