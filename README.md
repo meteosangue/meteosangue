@@ -1,6 +1,6 @@
 # Meteo Sangue
 
-[![Build Status](https://travis-ci.org/meteosangue/meteosangue.svg?branch=master)](https://travis-ci.org/astagi/meteosangue) [![codecov](https://codecov.io/gh/meteosangue/meteosangue/branch/master/graph/badge.svg)](https://codecov.io/gh/astagi/meteosangue)
+[![Build Status](https://travis-ci.org/meteosangue/meteosangue.svg?branch=master)](https://travis-ci.org/meteosangue/meteosangue) [![codecov](https://codecov.io/gh/meteosangue/meteosangue/branch/master/graph/badge.svg)](https://codecov.io/gh/meteosangue/meteosangue)
 
 ## Quickstart
 
