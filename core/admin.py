@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import BloodGroup
+
+
+@admin.register(BloodGroup)
+class BloodGroupAdmin(admin.ModelAdmin):
+    pass

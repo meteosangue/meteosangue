@@ -21,6 +21,9 @@ class BloodGroup(models.Model):
         default='S',
     ) #choice between U, E ...
 
+    def __str__(self):
+        return self.groupid
+
 
 class Log(models.Model):
     datetime = models.DateTimeField(unique=True)
