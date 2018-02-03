@@ -48,7 +48,7 @@ Launch
 ```
 
 
-If you want retrieve a specific one (example *AB+*) you can use `/api/bloodgroups/AB+` or `/api/bloodgroups/2`
+If you want retrieve a specific blood group (example *AB+*) you can use `/api/bloodgroups/AB+` or `/api/bloodgroups/2`
 
 `/api/bloodgroups/:ID`
 - **ID** : Integer or Groupid
