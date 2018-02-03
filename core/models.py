@@ -1,5 +1,3 @@
-import os
-
 from django.conf import settings
 from django.db import models
 
@@ -14,12 +12,12 @@ BLOOD_GROUP_STATUSES = (
 
 
 class BloodGroup(models.Model):
-    groupid = models.CharField(max_length=3, unique=True) #AB+, B-, ...
+    groupid = models.CharField(max_length=3, unique=True)  # AB+, B-, ...
     status = models.CharField(
         max_length=2,
         choices=BLOOD_GROUP_STATUSES,
         default='S',
-    ) #choice between U, E ...
+    )  # choice between U, E ...
 
     def __str__(self):
         return self.groupid
