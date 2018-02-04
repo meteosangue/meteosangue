@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  app:
+    build: ./
+    environment:
+      - "REDIS_URL=redis://redis:6379/0"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/data
+  redis:
+    image: redis:3-alpine
