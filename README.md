@@ -23,6 +23,17 @@ Launch
 
     $ python manage.py test
 
+
+## Docker
+
+Build image
+
+    $ docker-compose build
+
+and run
+
+    $ docker-compose up
+
 ## Our API
 
 `/api/bloodgroups` : gives you all bloodgroups in database
