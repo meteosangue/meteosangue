@@ -1,3 +1,5 @@
+import datetime
+
 from django.conf import settings
 from django.db import models
 
@@ -32,3 +34,13 @@ class Log(models.Model):
     twitter_done = models.BooleanField(default=False)
     telegram_done = models.BooleanField(default=False)
     facebook_done = models.BooleanField(default=False)
+
+    @property
+    def is_completed(self):
+        return self.twitter_done and self.telegram_done and self.facebook_done
+
+    def __str__(self):
+        if self.datetime:
+            return self.datetime.replace(microsecond=0).isoformat()
+        else:
+            return 'Bad Log entry'

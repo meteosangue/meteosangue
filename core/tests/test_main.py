@@ -67,6 +67,23 @@ class MainTest(TestCase):
 
         self.assertNotEqual(first_time, second_time)
 
+    def test_log_is_completed(self):
+        log = Log.objects.create(
+            datetime=datetime.now(),
+            facebook_done=True,
+            twitter_done=True,
+            telegram_done=True
+        )
+        self.assertTrue(log.is_completed)
+
+        log = Log.objects.create(
+            datetime=datetime.now(),
+            facebook_done=True,
+            twitter_done=False,
+            telegram_done=True
+        )
+        self.assertTrue(not log.is_completed)
+
     def test_get_blood_group_list(self):
         BloodGroup.objects.create(groupid='B+', status='Z')
         BloodGroup.objects.create(groupid='B-', status='U')
