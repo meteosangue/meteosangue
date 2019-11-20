@@ -11,10 +11,12 @@ node_modules
 .cache
 coverage
 meteosangue/uploads
-meteosangue/local_settings.py
 ghostdriver.log
 
 
 *.log
-*.env
+
+docker-docker-compose.yml
+.git
 db-data
+
