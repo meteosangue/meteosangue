@@ -198,6 +198,7 @@ RQ_QUEUES = {
 
 import dj_database_url
 db_from_env = dj_database_url.config()
+
 if db_from_env:
     DATABASES['default'].update(db_from_env)
 
@@ -206,8 +207,4 @@ if 'test' in sys.argv:
         from .test_settings import *
     except ImportError:
         pass
-else:
-    try:
-        from .local_settings import *
-    except ImportError:
-        pass
+

@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+
   app:
     build: ./
     environment:
@@ -9,5 +10,21 @@ services:
       - "8000:8000"
     volumes:
       - ./data:/data
+    depends_on:
+      - db
+      - redis
+
+    env_file:
+      - ./envs/meteosangue.env
+      - ./envs/db.env
+
   redis:
     image: redis:3-alpine
+
+  db:
+    image: postgres:11.5
+    restart: unless-stopped
+    env_file:
+      - ./envs/db.env
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
