@@ -189,7 +189,7 @@ from huey import RedisHuey
 from redis import ConnectionPool
 
 pool = ConnectionPool(
-    host=os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
+    host=os.getenv('REDIS_URL', 'localhost'),
     port=6379,
     max_connections=20
 )
