@@ -1,7 +1,10 @@
 import time
 import redis
+
 from django.conf import settings
-from django_rq import job
+
+from huey import crontab
+from huey.contrib.djhuey import db_periodic_task
 
 from .models import Log
 from .main import post_blood_weather, update_blood_groups
@@ -16,17 +19,11 @@ def fetch_and_update():
 
 
 """
-RQ job to update blood statuses
+Periodic task to update blood statuses
 """
-@job
+@db_periodic_task(crontab(minute='*/15'))
 def main_blood_groups_task():
-    print ('Fetching blood status...')
     fetch_and_update()
     time.sleep(settings.BLOOD_FETCH_INTERVAL)
     return True
 
-
-try:
-    main_blood_groups_task.delay()
-except redis.ConnectionError as ex:
-    print (ex)

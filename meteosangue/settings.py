@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'api',
-    'django_rq',
+    'huey.contrib.djhuey',
     'rest_framework'
 ]
 
@@ -181,23 +181,19 @@ UPLOAD_METEO = os.path.join(UPLOAD_ROOT, 'meteo/')
 
 BLOOD_FETCH_INTERVAL = 60 * 15
 
-RQ_QUEUES = {
-    'default': {
-        'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
-        'DEFAULT_TIMEOUT': 60 * 20,
-    },
-    'high': {
-        'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
-        'DEFAULT_TIMEOUT': 60 * 20,
-    },
-    'low': {
-        'URL': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
-        'DEFAULT_TIMEOUT': 60 * 20,
-    }
-}
 
 import dj_database_url
 db_from_env = dj_database_url.config()
+
+from huey import RedisHuey
+from redis import ConnectionPool
+
+pool = ConnectionPool(
+    host=os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
+    port=6379,
+    max_connections=20
+)
+HUEY = RedisHuey('meteosanguequeue', connection_pool=pool)
 
 if db_from_env:
     DATABASES['default'].update(db_from_env)

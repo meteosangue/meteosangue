@@ -28,8 +28,6 @@ pytz==2016.6.1
 redis==2.10.5
 requests==2.10.0
 requests-oauthlib==0.6.2
-rq==0.6.0
-rq-scheduler==0.7.0
 selenium==2.53.6
 simplegeneric==0.8.1
 six==1.10.0
@@ -39,3 +37,4 @@ wcwidth==0.1.7
 wheel==0.24.0
 telepot==9.1
 gunicorn==19.7.1
+huey==2.1.3
