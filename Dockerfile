@@ -32,4 +32,3 @@ ENV LC_ALL en_US.UTF-8
 ENV LC_CTYPE en_US.UTF-8
 
 RUN chmod +x docker-startup.sh
-CMD [ "./docker-startup.sh" ]
