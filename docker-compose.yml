@@ -5,7 +5,7 @@ services:
   app:
     build: ./
     environment:
-      - "REDIS_URL=redis://redis:6379/0"
+      - "REDIS_URL=redis"
     ports:
       - "8000:8000"
     volumes:
