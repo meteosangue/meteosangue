@@ -1,5 +1,5 @@
 #!/bin/bash
-
+export FETCH_SITE_WAIT=0
 function quit {
     killall python
     exit $1

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import time
 import tweepy
 
 from django.conf import settings
@@ -58,10 +59,13 @@ Method to fetch blood groups
 """
 def update_blood_groups():
     driver = webdriver.PhantomJS()
-    driver.set_window_size(450, 650)
+    driver.implicitly_wait(10)
     driver.get("https://web2.e.toscana.it/crs/meteo/")
+    time.sleep(settings.FETCH_SITE_WAIT)
 
     f = NamedTemporaryFile(delete=False)
+    driver.set_window_size(450, 650)
+    time.sleep(settings.FETCH_SITE_WAIT)
     driver.save_screenshot(f.name)
     tree = html.fromstring(driver.page_source)
     driver.quit()
@@ -76,11 +80,11 @@ def update_blood_groups():
             update_time.strftime("%Y-%m-%d_%H:%M:%S") + '.png',
             File(f)
         )
-        f.close()
         os.unlink(f.name)
         for group in groups:
             group_id = group.name.replace('N', '-').replace('P', '+')
             dbgroup, created = BloodGroup.objects.get_or_create(groupid=group_id)
             dbgroup.status = group.value
             dbgroup.save()
+    f.close()
     return BloodGroup.objects.all(), log

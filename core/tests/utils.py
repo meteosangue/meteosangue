@@ -7,6 +7,9 @@ class MockPhantomJS():
     def page_source(self):
         return self._content
 
+    def implicitly_wait(self, wait):
+        pass
+
     def set_window_size(self, w, h):
         pass
 
