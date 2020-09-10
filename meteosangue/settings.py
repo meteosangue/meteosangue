@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if os.getenv('PRODUCTION', '0') == '1' else True
 
 ALLOWED_HOSTS = []
 
@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'core',
     'api',
     'huey.contrib.djhuey',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -196,6 +197,16 @@ pool = ConnectionPool(
     max_connections=20
 )
 HUEY = RedisHuey('meteosanguequeue', connection_pool=pool)
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 if db_from_env:
     DATABASES['default'].update(db_from_env)
