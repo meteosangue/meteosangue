@@ -165,3 +165,15 @@ class MainTest(TestCase):
         telegram_status.side_effect = None
         fetch_and_update()
         self.assertTrue(Log.objects.all()[0].telegram_done)
+
+    @mock.patch('core.main.webdriver.PhantomJS', autospec = True)
+    def test_do_post_on_wrong_screenshot(self, phantom_driver):
+        mock_body = open(os.path.join(os.path.dirname(__file__), 'data', 'crs_page.html')).read()
+        phantom_driver.return_value = MockPhantomJS(mock_body, True)
+        self.assertEqual(len(Log.objects.all()), 0)
+        _groups, log = update_blood_groups()
+        self.assertEqual(len(Log.objects.all()), 0)
+        self.assertEqual(log, None)
+        phantom_driver.return_value = MockPhantomJS(mock_body, False)
+        update_blood_groups()
+        self.assertEqual(len(Log.objects.all()), 1)
