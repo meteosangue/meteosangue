@@ -180,7 +180,7 @@ STATIC_URL = '/static/'
 
 ENV_PATH = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_ROOT = os.path.join(ENV_PATH, 'uploads/')
-UPLOAD_METEO = os.path.join(UPLOAD_ROOT, 'meteo/')
+UPLOAD_METEO = 'meteo'
 
 BLOOD_FETCH_INTERVAL = 60 * 15
 
