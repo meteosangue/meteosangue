@@ -72,19 +72,20 @@ def update_blood_groups():
 
     groups = tree.xpath('//input[@type="hidden"]')
     update_time = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0])
-    log, created = Log.objects.get_or_create(datetime=update_time)
-
-    if created:
-        Log.objects.filter(~Q(datetime=update_time)).delete()
-        log.image.save(
-            update_time.strftime("%Y-%m-%d_%H:%M:%S") + '.png',
-            File(f)
-        )
-        os.unlink(f.name)
-        for group in groups:
-            group_id = group.name.replace('N', '-').replace('P', '+')
-            dbgroup, created = BloodGroup.objects.get_or_create(groupid=group_id)
-            dbgroup.status = group.value
-            dbgroup.save()
+    log = None
+    if os.path.getsize(f.name) > 3000:
+        log, created = Log.objects.get_or_create(datetime=update_time)
+        if created:
+            Log.objects.filter(~Q(datetime=update_time)).delete()
+            log.image.save(
+                update_time.strftime("%Y-%m-%d_%H:%M:%S") + '.png',
+                File(f)
+            )
+            os.unlink(f.name)
+            for group in groups:
+                group_id = group.name.replace('N', '-').replace('P', '+')
+                dbgroup, created = BloodGroup.objects.get_or_create(groupid=group_id)
+                dbgroup.status = group.value
+                dbgroup.save()
     f.close()
     return BloodGroup.objects.all(), log

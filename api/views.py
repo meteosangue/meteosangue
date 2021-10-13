@@ -19,13 +19,9 @@ class BloodGroupViewSet(viewsets.ViewSet):
         except BloodGroup.DoesNotExist:
             return Response(BLOODS_DOES_NOT_EXIST, status=404)
 
-    def retrieve(self, request, pk, *args, **kwargs):
+    def retrieve(self, request, *args, **kwargs):
         try:
-            if pk.isdigit():
-                blood_group = BloodGroup.objects.get(pk=pk)
-            else:
-                blood_group = BloodGroup.objects.get(groupid=pk)
-
+            blood_group = BloodGroup.objects.get(groupid=kwargs['group_id'])
             serialized_group = BloodGroupSerializer(blood_group)
 
             return Response(serialized_group.data, status=200)
