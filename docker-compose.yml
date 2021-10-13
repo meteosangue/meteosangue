@@ -4,6 +4,7 @@ services:
 
   app:
     build: ./
+    restart: always
     environment:
       - "REDIS_URL=redis"
     ports:
@@ -13,7 +14,19 @@ services:
     depends_on:
       - db
       - redis
+    command: ./docker-startup.sh app
+    env_file:
+      - ./envs/meteosangue.env
+      - ./envs/db.env
 
+  cron:
+    build: ./
+    restart: always
+    depends_on:
+      - app
+      - db
+      - redis
+    command: ./docker-startup.sh cron
     env_file:
       - ./envs/meteosangue.env
       - ./envs/db.env
@@ -22,7 +35,7 @@ services:
     image: redis:3-alpine
 
   db:
-    image: postgres:11.5
+    image: postgres:11.13
     restart: unless-stopped
     env_file:
       - ./envs/db.env

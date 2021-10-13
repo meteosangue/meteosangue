@@ -19,3 +19,4 @@ ghostdriver.log
 *.env
 db-data
 /env.sh
+/envs
