@@ -59,10 +59,10 @@ and run
 ```
 
 
-If you want retrieve a specific blood group (example *AB+*) you can use `/api/bloodgroups/AB+` or `/api/bloodgroups/2`
+If you want retrieve a specific blood group (example *AB+*) you can use `/api/bloodgroups/AB+`
 
-`/api/bloodgroups/:ID`
-- **ID** : Integer or Groupid
+`/api/bloodgroups/:Groupid`
+- **Groupid** : Group id (AB+, AB-, A+ ...)
 
 ## License
 
