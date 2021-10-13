@@ -20,8 +20,6 @@ class PostersRegister():
             if log and not getattr(log, poster[1], False):
                 try:
                     image_path = log.image.name if os.path.exists(log.image.name) else None
-                    if image_path:
-                        image_path = os.path.join(settings.UPLOAD_METEO, image_path)
                     poster[0](status, image_path)
                     setattr(log, poster[1], True)
                 except MeteoSangueException as ex:
