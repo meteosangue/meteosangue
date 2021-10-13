@@ -64,6 +64,12 @@ If you want retrieve a specific blood group (example *AB+*) you can use `/api/bl
 `/api/bloodgroups/:Groupid`
 - **Groupid** : Group id (AB+, AB-, A+ ...)
 
+### Deal with Facebook tokens
+
+To generate a page access token follow this guide: https://developers.facebook.com/docs/pages/access-tokens/
+
+You need a user access token to proceed.
+
 ## License
 
 Released under MIT License by @astagi
