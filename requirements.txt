@@ -32,7 +32,7 @@ six==1.10.0
 traitlets==4.2.2
 tweepy==3.9.0
 wcwidth==0.1.7
-wheel==0.24.0
+wheel==0.38.1
 telepot==9.1
 gunicorn==19.7.1
 huey==2.4.1
