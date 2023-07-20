@@ -19,9 +19,7 @@ Enter your virtual env and install requirements
 
     $ pip install -r requirements-test.txt
 
-Launch
-
-    $ python manage.py test
+TODO
 
 
 ## Docker
@@ -33,36 +31,6 @@ Build image
 and run
 
     $ docker-compose up
-
-## Our API
-
-`/api/bloodgroups` : gives you all bloodgroups in database
-
-
-```json
-[
-
-    {
-        "status": "S",
-        "status_expanded": "Stabile",
-        "groupid": "A+",
-        "id": 1
-    },
-    {
-        "status": "S",
-        "status_expanded": "Stabile",
-        "groupid": "AB+",
-        "id": 2
-    },
-
-]
-```
-
-
-If you want retrieve a specific blood group (example *AB+*) you can use `/api/bloodgroups/AB+`
-
-`/api/bloodgroups/:Groupid`
-- **Groupid** : Group id (AB+, AB-, A+ ...)
 
 ### Deal with Facebook tokens
 

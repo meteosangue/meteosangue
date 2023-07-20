@@ -1,6 +1,5 @@
 import os
 
-from django.conf import settings
 from .exceptions import MeteoSangueException
 
 

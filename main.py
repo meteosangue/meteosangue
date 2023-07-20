@@ -2,21 +2,15 @@
 
 import os
 import time
-import tweepy
 
-from django.conf import settings
-from django.core.files import File
-from django.db.models import Q
-from datetime import datetime
+from core import settings
 from lxml import html
 from tempfile import NamedTemporaryFile
 from selenium import webdriver
 
-from .exceptions import MeteoSangueException
-from .models import BloodGroup, Log
-from .posters import tweet_status, telegram_status, facebook_status
-from .posters_register import posters_register
-from .utils import crs_to_date
+from core.posters import tweet_status, telegram_status
+from core.posters_register import posters_register
+from core.utils import crs_to_date
 
 
 """
@@ -24,7 +18,7 @@ Register posters
 """
 posters_register.register_poster(tweet_status, 'twitter_done')
 posters_register.register_poster(telegram_status, 'telegram_done')
-posters_register.register_poster(facebook_status, 'facebook_done')
+# posters_register.register_poster(facebook_status, 'facebook_done')
 
 
 """
@@ -58,7 +52,7 @@ def post_blood_weather(blood_groups, log):
 Method to fetch blood groups
 """
 def update_blood_groups():
-    driver = webdriver.PhantomJS()
+    driver = webdriver.Chrome()
     driver.implicitly_wait(10)
     driver.get("https://web2.e.toscana.it/crs/meteo/")
     time.sleep(settings.FETCH_SITE_WAIT)
@@ -74,18 +68,12 @@ def update_blood_groups():
     update_time = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0])
     log = None
     if os.path.getsize(f.name) > 3000:
-        log, created = Log.objects.get_or_create(datetime=update_time)
-        if created:
-            Log.objects.filter(~Q(datetime=update_time)).delete()
-            log.image.save(
-                update_time.strftime("%Y-%m-%d_%H:%M:%S") + '.png',
-                File(f)
-            )
-            os.unlink(f.name)
-            for group in groups:
-                group_id = group.name.replace('N', '-').replace('P', '+')
-                dbgroup, created = BloodGroup.objects.get_or_create(groupid=group_id)
-                dbgroup.status = group.value
-                dbgroup.save()
+        os.unlink(f.name)
+        for group in groups:
+            group_id = group.name.replace('N', '-').replace('P', '+')
+            print (group_id)
     f.close()
-    return BloodGroup.objects.all(), log
+    return True
+
+
+update_blood_groups()
