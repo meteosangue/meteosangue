@@ -22,6 +22,27 @@ Enter your virtual env and install requirements
 TODO
 
 
+## API
+
+API is generated under `/api` folder
+
+```json
+{
+    "date": "2023-07-20T11:05:00+02:00",
+    "status": {
+        "A+": "E",
+        "A-": "U",
+        "B+": "E",
+        "B-": "S",
+        "O+": "E",
+        "O-": "Z",
+        "AB+": "S",
+        "AB-": "S"
+    }
+}
+```
+
+
 ## Docker
 
 Build image

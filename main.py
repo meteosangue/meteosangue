@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-import time
+import json
 
 from core import settings
 from lxml import html
@@ -30,6 +30,20 @@ def get_blood_group_list(blood_groups, icon, group_status, group_desc):
         return '{0} {1}: {2}\n'.format(icon, group_desc, ' , '.join(blood_groups_for_status))
     else:
         return ''
+    
+
+"""
+Method to generate API json file
+"""
+def generate_api(update_time, xml_groups):
+    api = {}
+    api['date'] = update_time.isoformat()
+    api['status'] = {}
+    for group in xml_groups:
+        group_id = group.name.replace('N', '-').replace('P', '+')
+        api['status'][group_id] = group.value
+    with open(os.path.join('api', 'meteo.json'), "w") as outfile:
+        outfile.write(json.dumps(api, indent=4))
 
 
 """
@@ -55,23 +69,20 @@ def update_blood_groups():
     driver = webdriver.Chrome()
     driver.implicitly_wait(10)
     driver.get("https://web2.e.toscana.it/crs/meteo/")
-    time.sleep(settings.FETCH_SITE_WAIT)
+    # time.sleep(settings.FETCH_SITE_WAIT)
 
     f = NamedTemporaryFile(delete=False)
     driver.set_window_size(450, 650)
-    time.sleep(settings.FETCH_SITE_WAIT)
+    # time.sleep(settings.FETCH_SITE_WAIT)
     driver.save_screenshot(f.name)
     tree = html.fromstring(driver.page_source)
     driver.quit()
 
     groups = tree.xpath('//input[@type="hidden"]')
     update_time = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0])
-    log = None
-    if os.path.getsize(f.name) > 3000:
+    if os.path.getsize(f.name) > 3000: # check if image is valid
         os.unlink(f.name)
-        for group in groups:
-            group_id = group.name.replace('N', '-').replace('P', '+')
-            print (group_id)
+        generate_api(update_time, groups)
     f.close()
     return True
 
