@@ -25,7 +25,7 @@ posters_register.register_poster(telegram_status, 'telegram_done')
 Method to format blood groups status
 """
 def get_blood_group_list(blood_groups, icon, group_status, group_desc):
-    blood_groups_for_status = blood_groups.values_list('groupid', flat=True).filter(status=group_status)
+    blood_groups_for_status = [k for k,v in blood_groups.items() if v == group_status]
     if len(blood_groups_for_status):
         return '{0} {1}: {2}\n'.format(icon, group_desc, ' , '.join(blood_groups_for_status))
     else:
@@ -42,24 +42,26 @@ def generate_api(update_time, xml_groups):
     for group in xml_groups:
         group_id = group.name.replace('N', '-').replace('P', '+')
         api['status'][group_id] = group.value
-    with open(os.path.join('api', 'meteo.json'), "w") as outfile:
+    with open(settings.API_FILE, "w") as outfile:
         outfile.write(json.dumps(api, indent=4))
 
 
 """
 Method to post blood weather on social
 """
-def post_blood_weather(blood_groups, log):
-    status = ''
-    status += get_blood_group_list(blood_groups, '🚨', 'Z', 'Emergenza')
-    status += get_blood_group_list(blood_groups, '🆘', 'U', 'Urgente')
-    status += get_blood_group_list(blood_groups, '💜', 'F', 'Fragile')
-    status += get_blood_group_list(blood_groups, '💚', 'S', 'Stabile')
-    status += get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza')
+def post_blood_weather():
+    with open(settings.API_FILE, "r") as outfile:
+        blood_groups = json.loads(outfile.read())['status']
+        status = ''
+        status += get_blood_group_list(blood_groups, '🚨', 'Z', 'Emergenza')
+        status += get_blood_group_list(blood_groups, '🆘', 'U', 'Urgente')
+        status += get_blood_group_list(blood_groups, '💜', 'F', 'Fragile')
+        status += get_blood_group_list(blood_groups, '💚', 'S', 'Stabile')
+        status += get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza')
 
-    posters_register.run(status, log)
+        print (status)
 
-    log.save()
+        # posters_register.run(status)
 
 
 """
@@ -87,4 +89,6 @@ def update_blood_groups():
     return True
 
 
-update_blood_groups()
+needs_update = update_blood_groups()
+if needs_update:
+    post_blood_weather()

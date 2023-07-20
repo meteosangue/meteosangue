@@ -86,6 +86,8 @@ UPLOAD_METEO = os.path.join(UPLOAD_ROOT, 'meteo/')
 
 BLOOD_FETCH_INTERVAL = 60 * 15
 
+API_FILE = os.path.join('api', 'meteo.json')
+
 if 'test' in sys.argv:
     try:
         from .test_settings import *
