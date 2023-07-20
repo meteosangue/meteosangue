@@ -6,10 +6,12 @@ DEBUG = False if os.getenv('PRODUCTION', '0') == '1' else True
 FETCH_SITE_WAIT = int(os.getenv('FETCH_SITE_WAIT', 20))
 
 # Twitter credentials
-TW_ACCESS_TOKEN = os.getenv('ACCESS_TOKEN', 'D3V')
-TW_ACCESS_TOKEN_SECRET = os.getenv('ACCESS_TOKEN_SECRET', 'D3V')
-TW_CONSUMER_KEY = os.getenv('CONSUMER_KEY', 'D3V')
-TW_CONSUMER_SECRET = os.getenv('CONSUMER_SECRET', 'D3V')
+TW_BEARER_TOKEN = os.getenv('TW_BEARER_TOKEN', 'D3V')
+
+TW_ACCESS_TOKEN = os.getenv('TW_ACCESS_TOKEN', 'D3V')
+TW_ACCESS_TOKEN_SECRET = os.getenv('TW_ACCESS_TOKEN_SECRET', 'D3V')
+TW_CONSUMER_KEY = os.getenv('TW_CONSUMER_KEY', 'D3V')
+TW_CONSUMER_SECRET = os.getenv('TW_CONSUMER_SECRET', 'D3V')
 
 # Telegram credentials
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN', 'D3V')
