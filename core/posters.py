@@ -3,7 +3,7 @@ import json
 import telepot
 import tweepy
 
-from .settings import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, BLOOD_ASSOCIATIONS, TELEGRAM_CHANNEL, TELEGRAM_TOKEN, FACEBOOK_TOKEN
+from .settings import  BLOOD_ASSOCIATIONS, TW_CONSUMER_KEY, TW_CONSUMER_SECRET, TW_ACCESS_TOKEN, TW_ACCESS_TOKEN_SECRET, TELEGRAM_CHANNEL, TELEGRAM_TOKEN, FACEBOOK_TOKEN
 from .exceptions import MeteoSangueException
 
 
@@ -12,8 +12,8 @@ Method to post with image on Twitter
 """
 def tweet_status(status, image_path=None):
     try:
-        auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-        auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+        auth = tweepy.OAuthHandler(TW_CONSUMER_KEY, TW_CONSUMER_SECRET)
+        auth.set_access_token(TW_ACCESS_TOKEN, TW_ACCESS_TOKEN_SECRET)
         api = tweepy.API(auth)
         if image_path:
             new_tweet = api.update_with_media(image_path, status=status)

@@ -14,15 +14,12 @@ class PostersRegister():
     def get_posters(self):
         return self._posters
 
-    def run(self, status, log):
+    def run(self, status, image_path):
         for poster in self._posters:
-            if log and not getattr(log, poster[1], False):
-                try:
-                    image_path = log.image.name if os.path.exists(log.image.name) else None
-                    poster[0](status, image_path)
-                    setattr(log, poster[1], True)
-                except MeteoSangueException as ex:
-                    print (ex)
+            try:
+                poster[0](status, image_path)
+            except MeteoSangueException as ex:
+                print (ex)
 
 
 posters_register = PostersRegister()

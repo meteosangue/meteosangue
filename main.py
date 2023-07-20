@@ -2,6 +2,7 @@
 
 import os
 import json
+import time
 
 from core import settings
 from lxml import html
@@ -17,7 +18,7 @@ from core.utils import crs_to_date
 Register posters
 """
 posters_register.register_poster(tweet_status, 'twitter_done')
-posters_register.register_poster(telegram_status, 'telegram_done')
+# posters_register.register_poster(telegram_status, 'telegram_done')
 # posters_register.register_poster(facebook_status, 'facebook_done')
 
 
@@ -44,28 +45,11 @@ def generate_api(update_time, xml_groups):
         api['status'][group_id] = group.value
     with open(settings.API_FILE, "w") as outfile:
         outfile.write(json.dumps(api, indent=4))
+    return api
 
 
 """
-Method to post blood weather on social
-"""
-def post_blood_weather():
-    with open(settings.API_FILE, "r") as outfile:
-        blood_groups = json.loads(outfile.read())['status']
-        status = ''
-        status += get_blood_group_list(blood_groups, '🚨', 'Z', 'Emergenza')
-        status += get_blood_group_list(blood_groups, '🆘', 'U', 'Urgente')
-        status += get_blood_group_list(blood_groups, '💜', 'F', 'Fragile')
-        status += get_blood_group_list(blood_groups, '💚', 'S', 'Stabile')
-        status += get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza')
-
-        print (status)
-
-        # posters_register.run(status)
-
-
-"""
-Method to fetch blood groups
+Method to fetch and post blood groups
 """
 def update_blood_groups():
     driver = webdriver.Chrome()
@@ -73,22 +57,27 @@ def update_blood_groups():
     driver.get("https://web2.e.toscana.it/crs/meteo/")
     # time.sleep(settings.FETCH_SITE_WAIT)
 
-    f = NamedTemporaryFile(delete=False)
-    driver.set_window_size(450, 650)
+    f = NamedTemporaryFile(delete=False, suffix='.png')
+    driver.set_window_size(450, 750)
     # time.sleep(settings.FETCH_SITE_WAIT)
     driver.save_screenshot(f.name)
     tree = html.fromstring(driver.page_source)
-    driver.quit()
 
     groups = tree.xpath('//input[@type="hidden"]')
     update_time = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0])
     if os.path.getsize(f.name) > 3000: # check if image is valid
-        os.unlink(f.name)
-        generate_api(update_time, groups)
+        api = generate_api(update_time, groups)
+        blood_groups = api['status']
+        status = ''
+        status += get_blood_group_list(blood_groups, '🚨', 'Z', 'Emergenza')
+        status += get_blood_group_list(blood_groups, '🆘', 'U', 'Urgente')
+        status += get_blood_group_list(blood_groups, '💜', 'F', 'Fragile')
+        status += get_blood_group_list(blood_groups, '💚', 'S', 'Stabile')
+        status += get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza')
+        print (status)
+        posters_register.run(status, f.name)
+    os.unlink(f.name)
     f.close()
-    return True
+    driver.quit()
 
-
-needs_update = update_blood_groups()
-if needs_update:
-    post_blood_weather()
+update_blood_groups()
