@@ -38,7 +38,7 @@ Method to generate API json file
 """
 def generate_api(update_time, xml_groups):
     api = {}
-    api['date'] = update_time.isoformat()
+    api['date'] = update_time
     api['status'] = {}
     for group in xml_groups:
         group_id = group.name.replace('N', '-').replace('P', '+')
@@ -46,6 +46,14 @@ def generate_api(update_time, xml_groups):
     with open(settings.API_FILE, "w") as outfile:
         outfile.write(json.dumps(api, indent=4))
     return api
+
+
+"""
+Method to generate API json file
+"""
+def get_api():
+    with open(settings.API_FILE, "r") as outfile:
+        return json.loads(outfile.read())
 
 
 """
@@ -65,7 +73,9 @@ def update_blood_groups():
 
     groups = tree.xpath('//input[@type="hidden"]')
     update_time = crs_to_date(tree.xpath('//div[@id="aggiornamento"]/text()')[0])
-    if os.path.getsize(f.name) > 3000: # check if image is valid
+    update_time = update_time.isoformat()
+    current_status_api = get_api()
+    if os.path.getsize(f.name) > 3000 and current_status_api['date'] != update_time: # check if image and date are valid
         api = generate_api(update_time, groups)
         blood_groups = api['status']
         status = ''
@@ -74,8 +84,7 @@ def update_blood_groups():
         status += get_blood_group_list(blood_groups, '💜', 'F', 'Fragile')
         status += get_blood_group_list(blood_groups, '💚', 'S', 'Stabile')
         status += get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza')
-        print (status)
-        posters_register.run(status, f.name)
+        # posters_register.run(status, f.name)
     os.unlink(f.name)
     f.close()
     driver.quit()
