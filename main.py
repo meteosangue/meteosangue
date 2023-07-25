@@ -9,7 +9,7 @@ from lxml import html
 from tempfile import NamedTemporaryFile
 from selenium import webdriver
 
-from core.posters import tweet_status, telegram_status
+from core.posters import tweet_status, telegram_status, facebook_status
 from core.posters_register import posters_register
 from core.utils import crs_to_date
 
@@ -17,9 +17,9 @@ from core.utils import crs_to_date
 """
 Register posters
 """
-posters_register.register_poster(tweet_status, 'twitter_done')
+# posters_register.register_poster(tweet_status, 'twitter_done')
 # posters_register.register_poster(telegram_status, 'telegram_done')
-# posters_register.register_poster(facebook_status, 'facebook_done')
+posters_register.register_poster(facebook_status, 'facebook_done')
 
 
 """
@@ -84,7 +84,7 @@ def update_blood_groups():
         status += get_blood_group_list(blood_groups, '💜', 'F', 'Fragile')
         status += get_blood_group_list(blood_groups, '💚', 'S', 'Stabile')
         status += get_blood_group_list(blood_groups, '💛', 'E', 'Eccedenza')
-        # posters_register.run(status, f.name)
+        posters_register.run(status, f.name)
     os.unlink(f.name)
     f.close()
     driver.quit()

@@ -1,9 +1,9 @@
-#import facebook
 import json
 import telepot
 import tweepy
+from pyfacebook import GraphAPI
 
-from .settings import BLOOD_ASSOCIATIONS, TW_CONSUMER_KEY, TW_CONSUMER_SECRET, TW_ACCESS_TOKEN, TW_ACCESS_TOKEN_SECRET, TELEGRAM_CHANNEL, TELEGRAM_TOKEN, FACEBOOK_TOKEN
+from .settings import BLOOD_ASSOCIATIONS, TW_CONSUMER_KEY, TW_CONSUMER_SECRET, TW_ACCESS_TOKEN, TW_ACCESS_TOKEN_SECRET, TELEGRAM_CHANNEL, TELEGRAM_TOKEN, FACEBOOK_TOKEN, FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, FACEBOOK_PAGE_ID
 from .exceptions import MeteoSangueException
 
 
@@ -71,10 +71,24 @@ def facebook_status(status, image_path=None):
 
     tags = [_generate_tag(ass['facebook_id']) for ass in BLOOD_ASSOCIATIONS if 'facebook_id' in ass]
     try:
-        graph = facebook.GraphAPI(FACEBOOK_TOKEN)
-        if image_path:
-            graph.put_photo(image=open(image_path, 'rb'), message=status, tags=json.dumps(tags))
-        else:
-            graph.put_wall_post(status)
+        api = GraphAPI(
+            app_id=FACEBOOK_APP_ID,
+            app_secret=FACEBOOK_APP_SECRET,
+            access_token=FACEBOOK_TOKEN
+        )
+        print(api)
+        data = api.post_object(
+            object_id=FACEBOOK_PAGE_ID,
+            connection="feed",
+            params={
+                "fields": "id,message,created_time,from",
+            },
+            data={"message": status},
+        )
+        print(data)
+        # if image_path:
+        #     graph.put_photo(image=open(image_path, 'rb'), message=status, tags=json.dumps(tags))
+        # else:
+        #     graph.put_wall_post(status)
     except Exception as ex:
         raise MeteoSangueException(ex)

@@ -19,6 +19,9 @@ TELEGRAM_CHANNEL = os.getenv('TELEGRAM_CHANNEL', 'D3V')
 
 # Facebook credentials
 FACEBOOK_TOKEN = os.getenv('FACEBOOK_TOKEN', 'D3V')
+FACEBOOK_APP_ID=os.getenv('FACEBOOK_APP_ID', 'D3V')
+FACEBOOK_APP_SECRET=os.getenv('FACEBOOK_APP_SECRET', 'D3V')
+FACEBOOK_PAGE_ID=os.getenv('FACEBOOK_PAGE_ID', 'D3V')
 
 # Blood associations data
 BLOOD_ASSOCIATIONS = [

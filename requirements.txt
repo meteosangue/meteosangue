@@ -10,3 +10,5 @@ pytz==2023.3
 selenium==4.10.0
 requests==2.31.0
 lxml==4.9.3
+
+-e git+https://github.com/sns-sdks/python-facebook.git@34460731b314a577c559e1764e575d82d94b64d4#egg=python-facebook-api
